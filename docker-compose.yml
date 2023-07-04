@@ -9,8 +9,6 @@ services:
     depends_on:
       - api
       - frontend
-    volumes:
-      - frontend:/app/frontend/build
   api:
     build:
       context: ./backend
@@ -21,9 +19,13 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    environment:
+      - WATCHPACK_POLLING=true
+      - FAST_REFRESH=false
+      - WDS_SOCKET_PORT=3000
+    volumes:
+      - ./frontend:/app
     ports:
       - "3000:3000"
     depends_on:
       - api
-volumes:
-  frontend:
