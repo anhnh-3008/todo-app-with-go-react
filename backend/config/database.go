@@ -18,7 +18,18 @@ func ConnectDb() error {
 	}
 
 	var err error
-	var DATABASE_URI string = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
+
+	CONNECT_MYSQL := fmt.Sprintf("%s:%s@tcp(%s:%s)/",
+		os.Getenv("DB_USER"),
+		os.Getenv("DB_PASSWORD"),
+		os.Getenv("DB_HOST"),
+		os.Getenv("DB_PORT"))
+
+	db, err := gorm.Open(mysql.Open(CONNECT_MYSQL), &gorm.Config{})
+
+	_ = db.Exec("CREATE DATABASE IF NOT EXISTS " + os.Getenv("DB_NAME") + ";")
+
+	DATABASE_URI := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
 		os.Getenv("DB_HOST"),

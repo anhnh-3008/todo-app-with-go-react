@@ -17,6 +17,19 @@ services:
       - "8080:8080"
     volumes:
       - ./backend:/app/backend
+    depends_on:
+      - db
+  db:
+    image: mysql:5.7
+    container_name: mysql
+    restart: on-failure
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    command: mysqld --default-authentication-plugin=mysql_native_password
   frontend:
     build:
       context: ./frontend
@@ -31,3 +44,6 @@ services:
       - "3000:3000"
     depends_on:
       - api
+
+volumes:
+  mysql_data:

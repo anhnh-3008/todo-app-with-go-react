@@ -9,10 +9,10 @@ COPY . /app
 
 # Build the go app
 RUN go build -o main .
-RUN chmod +x main.go
+RUN chmod +x .docker/*.sh
 
 # Expose port
 EXPOSE 8080
 
 # Define the command to run the app
-CMD ["./main"]
+ENTRYPOINT [ ".docker/entrypoint.sh" ]
