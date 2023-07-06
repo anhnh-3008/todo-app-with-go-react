@@ -1,16 +1,21 @@
 package main
 
 import (
+	"backend/main/config"
+	"backend/main/routes"
 	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"log"
 )
 
 func main() {
 	app := fiber.New()
 	fmt.Println("⚡️ Server is running ⚡️")
-	app.Get("/api", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World 👋!")
-	})
+	config.ConnectDb()
 
-	app.Listen(":8080")
+	app.Get("/api/login", routes.Login)
+	app.Post("/api/signup", routes.Signup)
+	app.Delete("/api/user/:id", routes.DeleteUser)
+
+	log.Fatal(app.Listen(":8080"))
 }

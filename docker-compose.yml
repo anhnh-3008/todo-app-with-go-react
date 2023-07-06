@@ -15,6 +15,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
+    volumes:
+      - ./backend:/app/backend
   frontend:
     build:
       context: ./frontend
