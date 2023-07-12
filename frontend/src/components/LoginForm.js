@@ -1,9 +1,10 @@
 import "../css/Layout.css";
-import { useState } from "react";
+import { React, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { FormControl, Switch, FormControlLabel } from "@mui/material";
 import { Link } from "react-router-dom";
+import axios from "axios"
 
 function EmailInput ({ email, emailError, setEmail }) {
   return (
@@ -56,12 +57,11 @@ function LinkSignup () {
   )
 }
 
-export default function LoginForm () {
+export default function LoginForm ({setOpenToast, setTypeToast, setMessageToast}) {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [emailError, setEmailError] = useState(false)
   const [passwordError, setPasswordError] = useState(false)
-
   const handleSubmit = (event) => {
     event.preventDefault()
 
@@ -75,7 +75,18 @@ export default function LoginForm () {
       setPasswordError(true)
     }
     if (email && password) {
-      alert(`Login success with email: ${email} and password: ${password}`)
+      axios.post('/api/login', { 
+        email: email,
+        password: password
+      }).then(res => {  
+        setOpenToast(true)
+        setTypeToast("success")
+        setMessageToast("Login Success!")
+      }).catch(error => {
+        setOpenToast(true)
+        setTypeToast("error")
+        setMessageToast("Login Error!")
+      });
     }
   }
 
