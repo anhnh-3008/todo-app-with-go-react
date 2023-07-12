@@ -4,8 +4,9 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { FormControl } from "@mui/material";
 import { Link } from "react-router-dom";
+import axios from "axios"
 
-function EmailInput ({ email, emailError, setEmail }) {
+function EmailInput ({ email, emailError, setEmail, messEmailError }) {
   return (
     <TextField
       required
@@ -17,13 +18,13 @@ function EmailInput ({ email, emailError, setEmail }) {
       sx={{mb: 3}}
       value={email}
       error={emailError}
-      helperText={emailError ? "Not blank" : ''}
+      helperText={messEmailError}
       onChange={e => setEmail(e.target.value)}
     />
   );
 }
 
-function PasswordInput ({ password, passwordError, setPassword }) {
+function PasswordInput ({ password, passwordError, setPassword, messPasswordError }) {
   return (
     <TextField
       required
@@ -35,25 +36,25 @@ function PasswordInput ({ password, passwordError, setPassword }) {
       sx={{mb: 3}}
       value={password}
       error={passwordError}
-      helperText={passwordError ? "Not blank" : ''}
+      helperText={messPasswordError}
       onChange={e => setPassword(e.target.value)}
     />
   )
 }
 
-function RePasswordInput ({ rePassword, rePasswordError, setRePassword }) {
+function RePasswordInput ({ rePassword, rePasswordError, setRePassword, messRePasswordError }) {
   return (
     <TextField
       required
       id="outlined-re-password-input"
-      label="Re-password"
+      label="Re-Password"
       type="password"
       placeholder="Confirm password"
       name="re-password-input"
       sx={{mb: 3}}
       value={rePassword}
       error={rePasswordError}
-      helperText={rePasswordError ? "Not equal your password" : ''}
+      helperText={messRePasswordError}
       onChange={e => setRePassword(e.target.value)}
     />
   )
@@ -67,38 +68,77 @@ function LinkSignup () {
   )
 }
 
-export default function SignupForm () {
+export default function SignupForm ({setOpenToast, setTypeToast, setMessageToast}) {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [rePassword, setRePassword] = useState("")
   const [emailError, setEmailError] = useState(false)
   const [passwordError, setPasswordError] = useState(false)
   const [rePasswordError, setRePasswordError] = useState(false)
-
+  const [messEmailError, setMessEmailError] = useState("")
+  const [messPasswordError, setMessPasswordError] = useState("")
+  const [messRePasswordError, setMessrRePasswordError] = useState("")
+  
   const handleSubmit = (event) => {
     event.preventDefault()
 
     setEmailError(false)
     setPasswordError(false)
     setRePasswordError(false)
+    setMessEmailError("")
+    setMessPasswordError("")
+    setMessrRePasswordError("")
 
-    if (email === "") {
-      setEmailError(true)
-    } else if (password === "") {
-      setPasswordError(true)
-    } else if (rePassword === "" || rePassword !== password) {
-      setRePasswordError(true)
-    } else if (email && password && rePassword) {
-      alert(`Signup success with email: ${email} and password: ${password}`)
-      window.location.href = '/'
-    }
+
+    axios.post('/api/signup', { 
+      email: email,
+      password: password,
+      rePassword: rePassword
+    }).then(res => {
+      setOpenToast(true)
+      setTypeToast("success")
+      setMessageToast("Signup Success! Let's login by your account.")
+      setEmailError(false)
+      setPasswordError(false)
+      setRePasswordError(false)
+      setMessEmailError("")
+      setMessPasswordError("")
+      setMessrRePasswordError("")
+      setEmail("")
+      setPassword("")
+      setRePassword("")
+    }).catch(resErr => {
+      setOpenToast(true)
+      setTypeToast("error")
+      setMessageToast("Signup Error!")
+      let errors = resErr.response.data.Error
+      console.log(errors)
+      Object.keys(errors).forEach(keyError => {
+        switch (keyError) {
+          case 'email':
+            setEmailError(true)
+            setMessEmailError(errors[keyError])
+            break;
+          case 'password':
+            setPasswordError(true)
+            setMessPasswordError(errors[keyError])
+            break;
+          case 'rePassword':
+            setRePasswordError(true)
+            setMessrRePasswordError(errors[keyError])
+            break;
+          default:
+            return
+        }
+      });
+    });
   }
   
   return (
     <FormControl className="login-form">
-      <EmailInput email={ email } emailError={ emailError } setEmail={ setEmail } />
-      <PasswordInput password={ password } passwordError={ passwordError } setPassword={ setPassword } />
-      <RePasswordInput rePassword={ rePassword } rePasswordError={ rePasswordError } setRePassword={ setRePassword }/>
+      <EmailInput email={ email } emailError={ emailError } setEmail={ setEmail } messEmailError={messEmailError} />
+      <PasswordInput password={ password } passwordError={ passwordError } setPassword={ setPassword } messPasswordError={messPasswordError} />
+      <RePasswordInput rePassword={ rePassword } rePasswordError={ rePasswordError } setRePassword={ setRePassword } messRePasswordError={messRePasswordError} />
       <LinkSignup />
       <Button variant="outlined" color="secondary" type="submit" onClick={ handleSubmit }>Signup</Button>
     </FormControl>

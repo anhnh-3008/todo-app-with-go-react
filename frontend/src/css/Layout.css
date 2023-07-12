@@ -24,3 +24,7 @@ a:link {
 .link-sign-up {
   padding-bottom: 10px;
 }
+
+#alert-error-login {
+  display: none;
+}

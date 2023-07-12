@@ -13,7 +13,7 @@ func main() {
 	fmt.Println("⚡️ Server is running ⚡️")
 	config.ConnectDb()
 
-	app.Get("/api/login", routes.Login)
+	app.Post("/api/login", routes.Login)
 	app.Post("/api/signup", routes.Signup)
 	app.Delete("/api/user/:id", routes.DeleteUser)
 
