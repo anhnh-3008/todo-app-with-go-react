@@ -1,13 +1,14 @@
 package config
 
 import (
-	"backend/main/models"
 	"fmt"
+	"log"
+	"os"
+
+	"backend/main/models"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"log"
-	"os"
 )
 
 var Database *gorm.DB
@@ -45,7 +46,7 @@ func ConnectDb() error {
 		panic(err)
 	}
 
-	Database.AutoMigrate(&models.User{})
+	Database.AutoMigrate(&models.User{}, &models.Event{})
 
 	return nil
 }

@@ -3,7 +3,7 @@ import { Alert, Snackbar } from "@mui/material";
 
 export default function Toast ({ open, setOpen, type, message }) {
   const handleClose = (event, reason) => {
-    if (reason == "clickaway") {
+    if (reason === "clickaway") {
       return;
     }
 
