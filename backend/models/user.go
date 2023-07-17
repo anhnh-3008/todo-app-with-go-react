@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/go-ozzo/ozzo-validation/is"
 	"gorm.io/gorm"
@@ -9,7 +10,8 @@ import (
 
 type User struct {
 	gorm.Model
-	ID         uint   `json:"id" gorm:"primaryKey"`
+	ID         uint `json:"ID" gorm:"primaryKey"`
+	Events     []Event
 	Email      string `json:"email"`
 	Password   string `json:"password"`
 	RePassword string `json:"rePassword"`

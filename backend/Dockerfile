@@ -13,8 +13,12 @@ COPY . /app
 RUN go get github.com/githubnemo/CompileDaemon
 RUN go install github.com/githubnemo/CompileDaemon
 
-# Allow permission for the scripts
-RUN chmod +x .docker/*.sh
+# Build the go app
+RUN go build -o main .
+
+# Grant script execute permission
+COPY /.docker /.docker
+RUN chmod a+x /.docker/*.sh
 
 # Expose port
 EXPOSE 8080

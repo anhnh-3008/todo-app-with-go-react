@@ -3,6 +3,8 @@ package routes
 import (
 	"backend/main/config"
 	"backend/main/models"
+	"time"
+
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -23,6 +25,11 @@ func Login(c *fiber.Ctx) error {
 		return c.SendStatus(404)
 	}
 
+	cookie := new(fiber.Cookie)
+	cookie.Name = "User ID"
+	cookie.Value = string(user.ID)
+	cookie.Expires = time.Now().Add(10 * time.Minute)
+	c.Cookie(cookie)
 	return c.Status(200).JSON(fiber.Map{
 		"message": "Login Success",
 		"user":    user,
