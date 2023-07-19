@@ -78,7 +78,7 @@ export default function SignupForm ({setOpenToast, setTypeToast, setMessageToast
   const [messEmailError, setMessEmailError] = useState("")
   const [messPasswordError, setMessPasswordError] = useState("")
   const [messRePasswordError, setMessrRePasswordError] = useState("")
-  
+
   const handleSubmit = (event) => {
     event.preventDefault()
 
@@ -90,7 +90,7 @@ export default function SignupForm ({setOpenToast, setTypeToast, setMessageToast
     setMessrRePasswordError("")
 
 
-    axios.post('/api/signup', { 
+    axios.post('/api/signup', {
       email: email,
       password: password,
       rePassword: rePassword
@@ -133,7 +133,7 @@ export default function SignupForm ({setOpenToast, setTypeToast, setMessageToast
       });
     });
   }
-  
+
   return (
     <FormControl className="login-form">
       <EmailInput email={ email } emailError={ emailError } setEmail={ setEmail } messEmailError={messEmailError} />

@@ -28,3 +28,21 @@ a:link {
 #alert-error-login {
   display: none;
 }
+
+.fc-col-header-cell-cushion{
+  color: #000000;
+  text-decoration: none;
+}
+
+.react-datepicker-wrapper {
+  display: none !important;
+}
+
+.react-datepicker-popper {
+  z-index: 9999 !important;
+  position: static !important;
+}
+
+.react-datepicker__triangle {
+  display: none !important;
+}

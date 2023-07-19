@@ -75,10 +75,17 @@ export default function LoginForm ({setOpenToast, setTypeToast, setMessageToast}
       setPasswordError(true)
     }
     if (email && password) {
-      axios.post('/api/login', { 
-        email: email,
-        password: password
-      }).then(res => {  
+      axios({
+        method: "post",
+        url: 'http://localhost/api/login',
+        data:{
+          email: email,
+          password: password
+        },
+        headers: {
+          "Access-Control-Allow-Origin": "*"
+        }
+      }).then(res => {
         setOpenToast(true)
         setTypeToast("success")
         setMessageToast("Login Success!")
